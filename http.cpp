@@ -34,7 +34,7 @@ int http_get(const char* url,
     char *auth_header = (char*)malloc(needed);
     if (!auth_header) return -1;
     snprintf(auth_header, needed,
-             "Authorization: Bearer %s", bearer_token);
+                "Authorization: Bearer %s", bearer_token);
     headers = curl_slist_append(headers, auth_header);
     free(auth_header);
     headers = curl_slist_append(headers, "Accept: application/json");

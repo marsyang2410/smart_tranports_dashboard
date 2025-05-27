@@ -5,18 +5,18 @@
 #define MAX_STOPS   32
 #define MAX_ETAS    64
 
-typedef struct {
+struct StationStop{
     char stop_uid[32];
     char route_uid[32];
     char route_name[64];
-} StationStop;
+};
 
-typedef struct {
+struct EtaInfo{
     char stop_uid[32];
     char route_uid[32];
     char route_name[64];
     int  estimate_time;
-} EtaInfo;
+};
 
 int fetch_station_stops(const char* city,
                         const char* station_uid,
