@@ -7,6 +7,7 @@
 
 struct StationStop{
     char stop_uid[32];
+    char stop_name[32];
     char route_uid[32];
     char route_name[64];
 };

@@ -36,10 +36,12 @@ int fetch_station_stops(const char* city,
     for (int i = 0; i < count && n < max_stops; i++) {
         cJSON* item = cJSON_GetArrayItem(stops_array, i);
         cJSON* su = cJSON_GetObjectItem(item, "StopUID");
+        cJSON* sn = cJSON_GetObjectItem(cJSON_GetObjectItem(item, "StopName"), "Zh_tw");
         cJSON* ru = cJSON_GetObjectItem(item, "RouteUID");
         cJSON* rn = cJSON_GetObjectItem(cJSON_GetObjectItem(item, "RouteName"), "En");
-        if (su && ru && rn) {
+        if (su && sn && ru && rn) {
             strncpy(stops[n].stop_uid,   su->valuestring, sizeof(stops[n].stop_uid)-1);
+            strncpy(stops[n].stop_name,   sn->valuestring, sizeof(stops[n].stop_name)-1);
             strncpy(stops[n].route_uid,  ru->valuestring, sizeof(stops[n].route_uid)-1);
             strncpy(stops[n].route_name, rn->valuestring, sizeof(stops[n].route_name)-1);
             n++;
