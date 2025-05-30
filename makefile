@@ -1,27 +1,26 @@
-CC       = g++
-CFLAGS   = -O2 -std=c++17 -I/opt/homebrew/Cellar/sfml/3.0.1/include
-LDFLAGS  = -lcurl -lsfml-graphics -lsfml-window -lsfml-system
-LDLIBS   = -L/opt/homebrew/Cellar/sfml/3.0.1/lib
+CXX      = g++
+CC       = gcc
+CXXFLAGS = -std=c++17
+CFLAGS   =
 
+CPP_SRC  = main.cpp auth.cpp http.cpp routes.cpp
+C_SRC    = cJSON.c
 
-# Add SFML include path
-SFML_INCLUDE = /opt/homebrew/Cellar/sfml/3.0.1/include
-SFML_LIB     = /opt/homebrew/Cellar/sfml/3.0.1/lib
+OBJ      = $(CPP_SRC:.cpp=.o) $(C_SRC:.c=.o)
 
-SRC      = main.cpp auth.cpp http.cpp routes.cpp cJSON.c
-OBJ      = $(SRC:.cpp=.o)
-OBJ     := $(OBJ:.c=.o)
+# Libraries
+LDLIBS = -lcurl
 
 # Target
 all: BusTimer
 
 # BusTimer executable
 BusTimer: $(OBJ)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDLIBS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDLIBS) $(LDFLAGS)
 
 # Compilation rules for .cpp files
 %.o: %.cpp
-	$(CC) $(CFLAGS) -I$(SFML_INCLUDE) -c $<
+	$(CXX) $(CXXFLAGS) -c $<
 
 # Compilation rules for .c files
 %.o: %.c

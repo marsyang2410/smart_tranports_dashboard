@@ -3,20 +3,29 @@
 
 static size_t write_cb(void* ptr, size_t size, size_t nmemb, void* userp) {
     size_t total = size * nmemb;
-    strncat((char*)userp, (char*)ptr, total);
+    size_t curr_len = strlen((char*)userp);
+    size_t max_len = 2048; // or whatever your buffer size is
+    size_t copy_len = (curr_len + total < max_len - 1) ? total : (max_len - curr_len - 1);
+    strncat((char*)userp, (char*)ptr, copy_len);
     return total;
 }
 
 
 int get_oauth_token(char* token, size_t token_len)
 {
-
-    const char* client_id     = getenv("TDX_CLIENT_ID");
-    const char* client_secret = getenv("TDX_CLIENT_SECRET");
-    if (!client_id || !client_secret) {
-        fprintf(stderr, "Missing TDX credentials\n");
+    //const char* client_id     = getenv("TDX_CLIENT_ID");
+    //const char* client_secret = getenv("TDX_CLIENT_SECRET");
+    
+    FILE * fp = fopen("./auth.txt", "r");
+    if(fp == nullptr){
+        printf("auth.txt doesn't exist");
         return -1;
     }
+    char client_id[100] = {};
+    char client_secret[100] = {};
+
+    fscanf(fp,"%s", client_id);
+    fscanf(fp,"%s", client_secret);
 
     printf("[DEBUG] Getting OAuth token...\n");
     CURL* curl = curl_easy_init();

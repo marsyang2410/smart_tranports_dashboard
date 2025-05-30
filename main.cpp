@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include "auth.h"
 #include "routes.h"
-#include "global.h"
 
 int api_call_count = 0;
 
@@ -59,6 +58,7 @@ int main() {
         printf("❌ No stops for StationUID %s\n", STATION_UID);
         return 1;
     }
+    api_call_count++;
 
     while (1) {
         int eta_count = fetch_etas(CITY, stops, stop_count, token, etas, MAX_ETAS);
@@ -66,6 +66,7 @@ int main() {
             printf("❌ Fetch ETA failed\n");
             break;
         }
+        api_call_count++;
         // Display the number of API calls made so far
         printf("[DEBUG] Total API calls made: %d\n", api_call_count);
         

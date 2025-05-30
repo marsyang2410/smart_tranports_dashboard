@@ -1,5 +1,4 @@
 // routes.cpp
-#include "global.h"
 #include "routes.h"
 #include "http.h"
 #include "cJSON.h"
@@ -49,7 +48,6 @@ int fetch_station_stops(const char* city,
     }
     cJSON_Delete(root);
     printf("[DEBUG] Found %d stops for station %s\n", n, station_uid);
-    api_call_count++;
     return n;
 }
 
@@ -117,6 +115,5 @@ int fetch_etas( const char* city,
     }
     cJSON_Delete(root);
     printf("[DEBUG] Found %d ETA entries\n", n);
-    api_call_count++;
     return n;
 }
