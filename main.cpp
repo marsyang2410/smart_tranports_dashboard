@@ -7,6 +7,13 @@
 int api_call_count = 0;
 
 // Comparison function for qsort
+int compare_stop_status(const void *a, const void *b) {
+    const EtaInfo *etaA = (const EtaInfo *)a;
+    const EtaInfo *etaB = (const EtaInfo *)b;
+    return etaA->stop_status - etaB->stop_status;
+}
+
+// Comparison function for qsort
 int compare_eta(const void *a, const void *b) {
     const EtaInfo *etaA = (const EtaInfo *)a;
     const EtaInfo *etaB = (const EtaInfo *)b;
@@ -17,19 +24,31 @@ int compare_eta(const void *a, const void *b) {
 void display_etas_with_colors(StationStop * stop_info, EtaInfo* etas, int eta_count) {
     printf("\n=== ETAs @ Station %s ===\n", stop_info->stop_name);
     for (int i = 0; i < eta_count; i++) {
+        
         int mins = etas[i].estimate_time / 60;
 
-        // Apply color based on the remaining time
-        if (mins <= 2) {
-            // Red for buses arriving soon
-            printf("\033[1m%-18s\033[0m (%s): \033[1;31m%s\033[0m\n", etas[i].route_name, etas[i].route_uid, "Arriving Soon");
-        } else if (mins <= 5) {
-            // Yellow for buses coming in 1-5 minutes
-            printf("\033[1m%-18s\033[0m (%s): \033[1;33m%2d min\033[0m\n", etas[i].route_name, etas[i].route_uid, mins);
-        } else {
-            // Green for buses arriving in more than 5 minutes
-            printf("\033[1m%-18s\033[0m (%s): \033[1;32m%2d min\033[0m\n", etas[i].route_name, etas[i].route_uid, mins);
+        if(etas[i].stop_status == 0){
+            // Apply color based on the remaining time
+            if (mins <= 2) {
+                // Red for buses arriving soon
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;31m%s\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, "將到站");
+            } else if (mins <= 5) {
+                // Yellow for buses coming in 1-5 minutes
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;33m%2d min\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, mins);
+            } else {
+                // Green for buses arriving in more than 5 minutes
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;32m%2d min\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, mins);
+            }
         }
+        else if(etas[i].stop_status == 1){
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;33m%s\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, "發車中");
+            }
+        else if(etas[i].stop_status == 3){
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;33m%s\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, "末班過");
+            }
+        else if(etas[i].stop_status == 4){
+                printf("\033[1m%-2d. %-18s\033[0m (%s): \033[1;33m%s\033[0m\n",i+1, etas[i].route_name, etas[i].route_uid, "未營運");
+            }
     }
 }
 
@@ -46,10 +65,9 @@ int main() {
     printf("Enter City Name:");
     scanf("%s", CITY);
 
-    printf("Enter Station UID:");
+    printf("Enter Station UID [example: TPE2291]:");
     scanf("%s", STATION_UID);
 
-    
     StationStop stops[MAX_STOPS];
     EtaInfo     etas[MAX_ETAS];
 
@@ -72,6 +90,9 @@ int main() {
         
         // Sort etas by estimate_time ascending
         qsort(etas, eta_count, sizeof(EtaInfo), compare_eta);
+        
+        // Sort etas by stop_status ascending
+        qsort(etas, eta_count, sizeof(EtaInfo), compare_stop_status);
 
         // Call the function to display ETAs with color
         display_etas_with_colors(stops, etas, eta_count);

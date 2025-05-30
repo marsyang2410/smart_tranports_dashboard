@@ -17,6 +17,7 @@ struct EtaInfo{
     char route_uid[32];
     char route_name[64];
     int  estimate_time;
+    int  stop_status;
 };
 
 int fetch_station_stops(const char* city,

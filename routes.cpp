@@ -95,7 +95,8 @@ int fetch_etas( const char* city,
         cJSON* su = cJSON_GetObjectItem(it, "StopUID");
         cJSON* ru = cJSON_GetObjectItem(it, "RouteUID");
         cJSON* et = cJSON_GetObjectItem(it, "EstimateTime");
-        if (su && ru && et) {
+        cJSON* ss = cJSON_GetObjectItem(it, "StopStatus");
+        if (su && ru && ss) {
             // find name
             const char* name = "";
             for (int j = 0; j < stop_count; j++) {
@@ -109,7 +110,12 @@ int fetch_etas( const char* city,
             strncpy(etas[n].stop_uid,   su->valuestring, sizeof(etas[n].stop_uid)-1);
             strncpy(etas[n].route_uid,  ru->valuestring, sizeof(etas[n].route_uid)-1);
             strncpy(etas[n].route_name, name,           sizeof(etas[n].route_name)-1);
-            etas[n].estimate_time = et->valueint;
+            etas[n].stop_status = ss->valueint;
+            if(etas[n].stop_status == 0 || etas[n].stop_status == 1){
+                etas[n].estimate_time = et->valueint;
+            }else{
+                etas[n].estimate_time = 1000000;
+            }
             n++;
         }
     }
