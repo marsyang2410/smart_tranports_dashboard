@@ -24,13 +24,19 @@ A real-time bus and MRT ETA dashboard built using the TDX (Taiwan's Transport Da
      export TDX_CLIENT_SECRET="your_client_secret"
      ```
 
+
 3. **Build & Run**:
-   - Clone the repository and navigate to the project directory.
-   - Run `make` to compile the code.
-   - Run the program using:
-     ```bash
-     ./BusTimer
-     ```
+    1. Clone the repository and navigate to the project directory.
+    2. Run `make` to compile the code.
+    3. Run the program using:
+       ```bash
+       ./BusTimer
+       ```
+    4. To get the correct StationUID for your query:
+       - First, enter the city name (as shown in the dropdown list, e.g., "Taipei", "NewTaipei", "Taoyuan", etc.) without spaces.
+       - Then, enter the StationUID for the bus or MRT station you want to check.
+       - You can find the StationUID via this website:
+         [TDX Station Query Tool](https://ticp.motc.gov.tw/motcTicket/tools?tab=station-query-tab&headerHidden=true)
 
 ## Tools Used
 
